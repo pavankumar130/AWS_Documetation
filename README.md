@@ -213,3 +213,120 @@ Amazon Elastic File System (EFS) is a scalable, fully managed file storage servi
 ### Example Use Case:
 
 Use EFS to store shared data (e.g., web server content, application logs, or home directories) across multiple EC2 instances, enabling high availability and scalability.
+
+## High Availability & Scalability in AWS
+
+High Availability (HA) and Scalability are critical components in cloud architecture to ensure that applications can handle varying traffic loads while minimizing downtime. AWS offers a variety of services to implement HA and scalability, including Elastic Load Balancer (ELB), Auto Scaling Groups (ASG), and multiple types of load balancers (e.g., ALB, NLB, GWLB) that distribute traffic across multiple resources and regions.
+
+Here’s a detailed breakdown of the core components related to high availability and scalability in AWS.
+
+### 1. Elastic Load Balancer (ELB)
+
+Elastic Load Balancing (ELB) is a fully managed service that automatically distributes incoming application traffic across multiple targets (e.g., EC2 instances, containers, IP addresses) in one or more availability zones (AZs). ELB improves the availability, fault tolerance, and scalability of your applications.
+
+### Types of ELBs:
+
+<li> Application Load Balancer (ALB)
+<li> Network Load Balancer (NLB)
+<li> Gateway Load Balancer (GWLB)
+
+### Key Features:
+
+<li> Auto-scaling support: ELB works seamlessly with Auto Scaling Groups to ensure applications scale horizontally (by adding/removing instances) based on traffic patterns.
+<li> Health checks: ELB performs health checks on targets (EC2 instances, containers) to ensure only healthy instances are receiving traffic.
+<li> Global Reach: ELB supports traffic distribution across multiple regions and availability zones, ensuring high availability.
+
+### 2. Sticky Sessions (Session Affinity)
+
+Sticky sessions, or session affinity, is a feature where requests from the same client (e.g., browser or app) are routed to the same EC2 instance during the duration of a session. This is useful when an application relies on session-specific data (e.g., a shopping cart in an e-commerce website).
+
+### How it works:
+
+<li>The load balancer inserts a session cookie in the client’s request (usually a “AWSELB” cookie).
+<li>This cookie ensures that subsequent requests from the same client will be directed to the same instance.
+
+### Use Case: 
+
+Sticky sessions are used in scenarios where an application maintains state between requests, such as an online shopping cart or login session, requiring the client to always be routed to the same backend.
+
+### 3. Cross-Zone Load Balancing
+
+Cross-Zone Load Balancing allows ELB to distribute traffic evenly across all registered targets (EC2 instances) in multiple availability zones (AZs). When enabled, ELB will balance the load across instances, regardless of the AZ they reside in.
+
+### Benefits:
+
+<li>Increased fault tolerance: If one AZ experiences issues, traffic can be redirected to instances in healthy AZs.
+<li>Efficient resource utilization: By distributing traffic evenly across instances in all AZs, resource utilization is maximized.
+
+### Use Case: 
+
+If you have an application with instances spread across multiple AZs, cross-zone load balancing ensures even distribution of traffic, improving high availability and fault tolerance.
+
+### 4. SSL (Secure Socket Layer) / TLS (Transport Layer Security)
+
+SSL/TLS is a cryptographic protocol that secures data transmitted between clients and servers. ELB supports SSL/TLS termination, which offloads the SSL/TLS encryption and decryption from your EC2 instances, improving performance and simplifying certificate management.
+
+### How it works:
+
+<li>SSL Termination at ELB: ELB decrypts incoming SSL/TLS traffic and forwards unencrypted requests to backend EC2 instances.
+<li>SSL Passthrough: In certain scenarios, the traffic remains encrypted between the load balancer and the backend instance, and only the client-to-ELB communication is decrypted.
+
+### Use Case: 
+
+For secure applications such as e-commerce sites, banking applications, or any service requiring encrypted communication between the client and the server, SSL termination at the load balancer provides efficiency and security.
+
+### 5. Application Load Balancer (ALB)
+
+Application Load Balancer (ALB) is a type of ELB designed to handle HTTP and HTTPS traffic. It operates at the application layer (Layer 7) and offers advanced routing features, such as host-based and path-based routing, WebSocket support, and SSL termination.
+
+### Features:
+
+<li>Content-based routing: Routes requests based on URL paths, hostnames, or HTTP headers. For example, routing traffic to /api to one set of EC2 instances and /images to another.
+<li>SSL Termination: ALB can terminate SSL/TLS connections and route encrypted traffic to backend instances if needed.
+<li>WebSockets and HTTP/2 support: ALB supports WebSockets, allowing for real-time applications, and HTTP/2, which enhances performance.
+<li>Integrated with AWS WAF: ALB can integrate with AWS Web Application Firewall (WAF) to protect against common web exploits.
+
+### Use Case: 
+
+Ideal for web applications, microservices architectures, and APIs where content-based routing is necessary, such as directing API calls to one set of instances and static content to another.
+
+### 6. Network Load Balancer (NLB)
+
+Network Load Balancer (NLB) operates at the transport layer (Layer 4) and is designed to handle high-throughput, low-latency traffic, such as TCP and UDP traffic. NLB is capable of handling millions of requests per second and is ideal for applications requiring high-performance and low-latency networking.
+
+### Features:
+
+<li>High throughput and low latency: NLB is capable of handling sudden and unpredictable traffic spikes with minimal latency.
+<li>Static IP support: NLB provides a single, static IP address per Availability Zone, which can be used for clients to connect.
+<li>TLS Termination: Like ALB, NLB can terminate TLS traffic, offloading encryption/decryption from backend instances.
+<li>Health checks: NLB supports health checks at the network layer, ensuring traffic is only directed to healthy instances.
+
+### Use Case: 
+
+Best suited for real-time applications, gaming, IoT services, or any application requiring extremely low latency and high performance, such as high-frequency trading platforms or gaming servers.
+
+### 7. Gateway Load Balancer (GWLB)
+
+Gateway Load Balancer (GWLB) is a load balancer designed to handle third-party virtual appliances such as firewalls, intrusion detection systems (IDS), or deep packet inspection services.
+
+### Features:
+
+<li>Layer 3 routing: GWLB operates at the network layer (Layer 3), making it ideal for routing traffic through third-party security services.
+<li>Scalability: GWLB automatically scales with your traffic and ensures high availability by distributing traffic to virtual appliances across multiple AZs.
+<li>Integration with VPC Traffic Mirroring: GWLB integrates with VPC Traffic Mirroring to capture and analyze traffic as it flows through the network.
+
+### Use Case: 
+Ideal for scenarios where you need to insert third-party security appliances (like firewalls or IDS) into the traffic flow between clients and your backend resources.
+
+### 8. Auto Scaling Group (ASG)
+
+An Auto Scaling Group (ASG) automatically adjusts the number of EC2 instances in response to changes in traffic load. It ensures your application scales horizontally (up or down) based on demand.
+
+### Key Features:
+
+<li>Automatic scaling: Based on traffic (CPU usage, request count, etc.), ASG automatically adds or removes EC2 instances.
+<li>Health checks: ASGs continuously monitor EC2 instance health and replace unhealthy instances with new ones.
+<li>Scaling policies: You can set up scaling policies based on CloudWatch metrics, such as scaling out when CPU usage exceeds 80% for 5 minutes.
+
+### Use Case: 
+For applications with unpredictable or fluctuating demand, ASG ensures that the right number of EC2 instances is available to handle traffic.
