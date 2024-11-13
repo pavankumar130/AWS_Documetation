@@ -82,7 +82,7 @@ A policy that allows a user to upload files to an S3 bucket but not delete them 
             "Resource": "arn:aws:s3:::my-bucket/*"
         }
     ]
-}
+} ```
 
 ### 5. IAM Password Policies
 
