@@ -67,6 +67,7 @@ An IAM policy is a JSON document that defines permissions. Policies specify what
 
 A policy that allows a user to upload files to an S3 bucket but not delete them could look like this:
 
+```json
 {
     "Version": "2012-10-17",
     "Statement": [
