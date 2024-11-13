@@ -42,7 +42,7 @@ An IAM role is an AWS identity that you can assume to perform specific tasks. Un
 ### Attributes:
 
 <li> Roles have permissions attached to them, similar to users and groups, but they are meant to be assumed temporarily by entities that require access to resources. </li>
-<li> Roles can be assumed by IAM users or AWS services to perform specific actions on behalf of the entity. <li>
+<li> Roles can be assumed by IAM users or AWS services to perform specific actions on behalf of the entity. </li>
 
 ### Example Use Case:
 
