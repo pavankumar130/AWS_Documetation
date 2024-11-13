@@ -105,3 +105,111 @@ IAM password policies define the security requirements for user passwords in you
 <li> Require at least one uppercase letter, one lowercase letter, one number, and one special character </li>
 <li> Password expiration every 90 days </li>
 <li> Prevent the reuse of the last 5 passwords </li>
+
+## AWS EC2 Overview
+
+Amazon Elastic Compute Cloud (EC2) is a scalable computing service provided by AWS that allows users to run virtual machines (called instances) on-demand. EC2 offers various types of instances optimized for different workloads, such as general computing, memory-intensive, and compute-intensive tasks.
+
+EC2 instances are backed by other AWS services that enhance their functionality and security. Some of these services include Security Groups, Placement Groups, Elastic Network Interfaces (ENIs), Elastic Block Store (EBS), Amazon Machine Images (AMIs), and Elastic File System (EFS). Each of these components serves a specific purpose in ensuring high availability, security, and scalability for EC2 instances.
+
+### Key EC2 Components
+
+### 1. Security Groups
+
+Security Groups in AWS EC2 act as virtual firewalls to control inbound and outbound traffic to EC2 instances. They are stateful, meaning if you allow inbound traffic to a specific port, the response is automatically allowed regardless of outbound rules.
+
+### Attributes:
+
+<li>Security groups control network access at the instance level.
+<li>Rules are defined by IP protocol (e.g., TCP, UDP), port range (e.g., 22 for SSH, 80 for HTTP), and source/destination IP address or CIDR block.
+<li>You can attach multiple security groups to an EC2 instance.
+<li>Security groups are stateful: If you allow inbound traffic, the corresponding outbound traffic is automatically allowed.
+<li>Security groups are applied to EC2 instances dynamically; changes are automatically applied.
+
+### Example Use Case:
+
+You can create a security group to allow inbound SSH traffic on port 22 from a specific IP address and HTTP traffic (port 80) from anywhere.
+
+### Example Rule:
+
+<li>Allow inbound traffic on port 22 (SSH) from the IP 192.168.1.1/32.
+<li>Allow inbound traffic on port 80 (HTTP) from anywhere (0.0.0.0/0).
+
+### 2. Placement Groups
+
+A Placement Group is a logical grouping of instances within a single Availability Zone (AZ). Placement groups are used to influence the placement of EC2 instances on physical hardware to meet specific performance needs.
+
+There are three types of placement groups:
+
+<li>Cluster Placement Group: Packs instances close together within a single AZ to provide low-latency network performance. Suitable for high-performance computing (HPC) applications.
+
+<li>Spread Placement Group: Distributes instances across underlying hardware to reduce the risk of simultaneous failures. Ideal for critical applications where high availability is important.
+
+<li>Partition Placement Group: Divides instances into logical partitions, with each partition being placed on separate racks. Useful for large distributed systems that require isolation between partitions (e.g., Hadoop).
+
+### Example Use Case:
+
+A Cluster Placement Group is used when you need instances to be placed on the same physical hardware for low-latency communication, such as in high-performance computing scenarios.
+
+### 3. Elastic Network Interface (ENI)
+
+An Elastic Network Interface (ENI) is a virtual network interface that can be attached to an EC2 instance. It provides network connectivity to an instance, enabling communication with other instances or external networks.
+
+### Attributes:
+
+<li>ENIs are associated with an instance in a VPC (Virtual Private Cloud) and can be configured with one or more private IP addresses.
+<li>ENIs can be moved between instances, enabling failover scenarios.
+<li>You can attach multiple ENIs to an instance for high availability and load balancing.
+
+### Example Use Case:
+
+Attach multiple ENIs to an EC2 instance for a multi-tier application (e.g., separate network interfaces for web and database traffic).
+
+### 4. Elastic Block Store (EBS)
+
+Elastic Block Store (EBS) provides persistent block-level storage that can be attached to EC2 instances. Unlike instance store volumes (which are ephemeral and only exist during the instance lifecycle), EBS volumes persist even after an instance is stopped or terminated.
+
+### Attributes:
+
+<li>EBS volumes are highly available and durable, stored in multiple Availability Zones.
+<li>EBS volumes come in different types, optimized for different use cases (e.g., SSD-backed for performance, HDD-backed for throughput).
+<li>Volumes can be resized and provisioned dynamically as needed.
+<li>Snapshots: EBS supports creating backups (snapshots) of volumes, which can be used to create new volumes or restore data.
+
+### Example Use Case:
+
+You can attach an EBS volume to an EC2 instance to store application data, databases, or file systems that need to persist beyond the instance lifecycle.
+
+### Common EBS Volume Types:
+
+<li>gp3 (General Purpose SSD): Balanced price/performance for most workloads.
+<li>io2 (Provisioned IOPS SSD): High-performance storage for I/O-intensive applications like databases.
+<li>st1 (Throughput Optimized HDD): Cost-effective storage for large, sequential workloads like log storage or big data.
+
+### 5. Amazon Machine Image (AMI)
+
+An Amazon Machine Image (AMI) is a pre-configured template that contains the operating system, software, and configuration settings for launching EC2 instances. AMIs allow you to quickly replicate and deploy instances with a known configuration.
+
+### Attributes:
+
+<li> AMIs can be public (provided by AWS or the community) or private (created by the user).
+<li> An AMI consists of the root volume (e.g., an EBS volume) and the necessary configuration files for bootstrapping the instance.
+<li> You can create your own custom AMIs from an existing EC2 instance, preserving the configuration and software installed.
+
+### Example Use Case:
+
+Create a custom AMI that includes a specific version of a web server and application software to quickly deploy consistent EC2 instances across your environment.
+
+### 6. Elastic File System (EFS)
+
+Amazon Elastic File System (EFS) is a scalable, fully managed file storage service that can be used with EC2 instances. It provides a simple, scalable, and highly available shared file system that can be accessed from multiple EC2 instances simultaneously.
+
+### Attributes:
+
+<li>EFS provides file-level storage, allowing multiple instances to read from and write to the same file system.
+<li>It automatically scales as your storage needs grow, providing up to petabytes of capacity.
+<li>EFS supports Network File System (NFS) v4.1 and v4.2 protocols, making it suitable for Linux-based workloads.
+
+### Example Use Case:
+
+Use EFS to store shared data (e.g., web server content, application logs, or home directories) across multiple EC2 instances, enabling high availability and scalability.
